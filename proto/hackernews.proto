@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 package grpc_web_hacker_news;
+option go_package = "./grpc_web_hacker_news";
 
 message Story {
     int32 id = 1;
