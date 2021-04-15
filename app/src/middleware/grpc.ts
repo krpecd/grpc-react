@@ -1,16 +1,19 @@
-import { Action, Dispatch, Middleware, MiddlewareAPI } from 'redux';
-import { Code, grpc, Metadata, Transport } from 'grpc-web-client';
-import * as jspb from 'google-protobuf';
+import { Action, AnyAction, Dispatch, Middleware, MiddlewareAPI } from 'redux';
+import { grpc } from 'grpc-web-client';
+import { TransportFactory } from 'grpc-web-client/dist/typings/transports/Transport';
+import { Metadata } from 'grpc-web-client/dist/typings/metadata';
+import { Code } from 'grpc-web-client/dist/typings/Code';
+import { ProtobufMessage } from 'grpc-web-client/dist/typings/message';
 
 const GRPC_WEB_REQUEST = 'GRPC_WEB_REQUEST';
 
 // Descriptor of a grpc-web payload
 // life-cycle methods mirror grpc-web but allow for an action to be dispatched when triggered
-export type GrpcActionPayload<RequestType extends jspb.Message, ResponseType extends jspb.Message> = {
+export type GrpcActionPayload<RequestType extends ProtobufMessage, ResponseType extends ProtobufMessage> = {
   // The method descriptor to use for a gRPC request, equivalent to grpc.invoke(methodDescriptor, ...)
   methodDescriptor: grpc.MethodDefinition<RequestType, ResponseType>,
   // The transport to use for grpc-web, automatically selected if empty
-  transport?: Transport,
+  transport?: TransportFactory,
   // toggle debug messages
   debug?: boolean,
   // the URL of a host this request should go to
@@ -30,13 +33,13 @@ export type GrpcActionPayload<RequestType extends jspb.Message, ResponseType ext
 };
 
 // Basic type for a gRPC Action
-export type GrpcAction<RequestType extends jspb.Message, ResponseType extends jspb.Message> = {
+export type GrpcAction<RequestType extends ProtobufMessage, ResponseType extends ProtobufMessage> = {
   type: typeof GRPC_WEB_REQUEST,
   payload: GrpcActionPayload<RequestType, ResponseType>,
 };
 
 // Action creator, Use it to create a new grpc action
-export function grpcRequest<RequestType extends jspb.Message, ResponseType extends jspb.Message>(
+export function grpcRequest<RequestType extends ProtobufMessage, ResponseType extends ProtobufMessage>(
   payload: GrpcActionPayload<RequestType, ResponseType>
 ): GrpcAction<RequestType, ResponseType> {
   return {
@@ -47,7 +50,7 @@ export function grpcRequest<RequestType extends jspb.Message, ResponseType exten
 
 /* tslint:disable:no-any*/
 export function newGrpcMiddleware(): Middleware {
-  return ({getState, dispatch}: MiddlewareAPI<{}>) => (next: Dispatch<{}>) => (action: any) => {
+  return ({getState, dispatch}: MiddlewareAPI) => (next: Dispatch<AnyAction>) => (action: any) => {
     // skip non-grpc actions
     if (!isGrpcWebUnaryAction(action)) {
       return next(action);
@@ -85,7 +88,7 @@ export function newGrpcMiddleware(): Middleware {
   };
 }
 
-function isGrpcWebUnaryAction(action: any): action is GrpcAction<jspb.Message, jspb.Message> {
+function isGrpcWebUnaryAction(action: any): action is GrpcAction<ProtobufMessage, ProtobufMessage> {
   return action && action.type && action.type === GRPC_WEB_REQUEST && isGrpcWebPayload(action);
 }
 

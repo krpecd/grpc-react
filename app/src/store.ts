@@ -9,13 +9,18 @@ export interface RootState extends StoreEnhancerState {
   stories: StoryState;
 }
 
+
 const reducers = combineReducers<RootState>({
   stories,
 });
 
-export default createStore(
+const store = createStore(
   reducers,
   applyMiddleware(
     newGrpcMiddleware(),
-  )
-);
+    )
+    );
+
+export type AppDispatch = typeof store.dispatch;
+
+export default store

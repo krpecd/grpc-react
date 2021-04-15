@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import './index.css';
@@ -11,5 +11,5 @@ ReactDOM.render(
       <Stories />
     </div>
   </Provider>,
-  document.getElementById('root') as HTMLElement
+  document.getElementById('root')
 );

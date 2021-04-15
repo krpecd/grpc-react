@@ -3,10 +3,10 @@ import { ADD_STORY, SELECT_STORY, STORIES_INIT } from '../actions/stories';
 import { Story } from '../proto/hackernews_pb';
 
 export type StoryState = {
-  readonly stories: { [storyId: number]: Story.AsObject },
-  readonly error: Error | null,
-  readonly loading: boolean,
-  readonly selected: Story.AsObject | null,
+  stories: { [storyId: number]: Story.AsObject },
+  error: Error | null,
+  loading: boolean,
+  selected: Story.AsObject | null,
 };
 
 const initialState = {

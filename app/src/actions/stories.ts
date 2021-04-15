@@ -1,8 +1,9 @@
 import { Action } from 'redux';
 import { ListStoriesRequest, ListStoriesResponse, Story } from '../proto/hackernews_pb';
 import { GrpcAction, grpcRequest } from '../middleware/grpc';
-import { Code, Metadata } from 'grpc-web-client';
 import { HackerNewsService } from '../proto/hackernews_pb_service';
+import { Code } from 'grpc-web-client/dist/typings/Code';
+import { Metadata } from 'grpc-web-client/dist/typings/metadata';
 
 export const STORIES_INIT = 'STORIES_INIT';
 export const ADD_STORY = 'ADD_STORY';
