@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@improbable-eng/grpc-web": "^0.14.0",
     "@types/semantic-ui": "^2.2.7",
     "google-protobuf": "^3.15.8",
     "grpc-web-client": "^0.7.0",
